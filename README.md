@@ -4,7 +4,7 @@ Software Proejct 2 AD Project
 
 # TODO
 
-- [ ] Server/Database Building
+- [x] Server/Database Building
 - [ ] Cloud Functions Implementation
 - [ ] GUI Implementation
 - [ ] Packaging
