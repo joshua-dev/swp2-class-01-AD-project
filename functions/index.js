@@ -1,40 +1,35 @@
 // Runtime: Node.js v12.13.0
 // firebase --version: 7.8.1
 
-// import admin SDK
-
 // The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
 const functions = require("firebase-functions");
 
 // The Firebase Admin SDK to access the Firebase Realtime Database.
 const admin = require("firebase-admin");
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp();
 
 // get Database from Cloud Firestore
 let db = admin.firestore();
 
-exports.get = functions.https.onRequest(async (req, res) => {
-  let docRef = db.collection("Books");
+exports.getLender = functions.https.onRequest(async (req, res) => {
+  const title = req.body.text.title;
+  var query = {
+    title: title
+  };
 
-  docRef
+  db.collection("Books")
     .get()
     .then(snapshot => {
-      snapshot.forEach(doc => {
-        let info = doc.data();
-        output = {
-          title: info.title,
-          author: info.author,
-          owner: info.owner,
-          lender: info.lender
-        };
-
-        console.log(output);
-        res.send(output);
+      snapshot.forEach(book => {
+        var data = book.data();
+        if (data.title === title) {
+          // TODO
+        }
       });
-      // Each then should return Promise
+      // should return Promise
       return;
     })
     .catch(err => {
-      console.log("Error getting documents", err);
+      console.log("Error getting documents: ", err);
     });
 });
