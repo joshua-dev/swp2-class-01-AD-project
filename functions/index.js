@@ -1,4 +1,4 @@
-// Runtime: Node.js v12.13.0
+// Runtime: Node.js 8
 // firebase --version: 7.8.1
 
 // The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
@@ -8,27 +8,53 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
 
-// get Database from Cloud Firestore
-let db = admin.firestore();
+// Get Database from Cloud Firestore
+const db = admin.firestore();
 
-exports.getLender = functions.https.onRequest(async (req, res) => {
-  const title = req.body.text.title;
-  var query = {
-    lender: ""
-  };
+// Get string-similarity module
+const stringSimilarity = require("string-similarity");
+
+// Get the title of all books in Database, send to Client
+exports.showAll = functions.https.onRequest(async (req, res) => {
+  var query = {};
+  var array = new Array();
 
   db.collection("Books")
     .get()
     .then(snapshot => {
       snapshot.forEach(book => {
-        var data = book.data();
-        if (data.title === title) {
-          query.lender = data.lender;
-        }
+        array.push(book.data().title);
       });
-      console.log("query: ", query);
-      res.send(query);
-      // should return Promise
+
+      query.result = array;
+
+      res.send(JSON.stringify(query));
+
+      // Should return Promise
+      return;
+    })
+    .catch(err => {
+      console.log("Error getting documents: ", err);
+    });
+});
+
+// Get the data of book that has the highest string similarity with the book in the request, send to Client
+exports.search = functions.https.onRequest(async (req, res) => {
+  var query = {};
+  const keyWord = req.body.text.title;
+
+  db.collection("Books")
+    .get()
+    .then(snapshot => {
+      var titles = new Array();
+
+      snapshot.forEach(book => titles.push(book.data().title));
+      const mostSimilar = stringSimilarity.findBestMatch(keyWord, titles);
+
+      query.result = mostSimilar;
+
+      res.send(JSON.stringify(query));
+
       return;
     })
     .catch(err => {
