@@ -14,7 +14,7 @@ let db = admin.firestore();
 exports.getLender = functions.https.onRequest(async (req, res) => {
   const title = req.body.text.title;
   var query = {
-    title: title
+    lender: ""
   };
 
   db.collection("Books")
@@ -23,9 +23,11 @@ exports.getLender = functions.https.onRequest(async (req, res) => {
       snapshot.forEach(book => {
         var data = book.data();
         if (data.title === title) {
-          // TODO
+          query.lender = data.lender;
         }
       });
+      console.log("query: ", query);
+      res.send(query);
       // should return Promise
       return;
     })
