@@ -4,8 +4,8 @@ Software Proejct 2 AD Project
 
 # TODO
 
-- [x] Server/Database Building
+- [x] Server/Database Building: Firebase
 - [ ] Cloud Functions Implementation
-- [ ] GUI Implementation
+- [ ] GUI Implementation: PyQt5
 - [ ] Packaging
 - [ ] Export to executable
