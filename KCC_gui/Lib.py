@@ -11,10 +11,8 @@ class Library(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
-        self.scoredb = []
 
     def initUI(self):
-        self.scoredb = []
         self.hbox1 = QHBoxLayout()
         self.hbox2 = QHBoxLayout()
         self.hbox3 = QHBoxLayout()
@@ -115,10 +113,3 @@ class Library(QWidget):
 
         if sender.text() == "검색":
             self.search_box.currentText()
-
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = Library()
-    sys.exit(app.exec_())
