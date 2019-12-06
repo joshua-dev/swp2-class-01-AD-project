@@ -1,13 +1,10 @@
-'''
-KCC 도서관 관리 프로그램
-'''
-
-import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt
 
 
 class Library(QWidget):
+
+    # constructor
     def __init__(self):
         super().__init__()
         self.initUI()
@@ -55,7 +52,6 @@ class Library(QWidget):
         self.lend_btn = QPushButton("대여하기")
         self.lend_btn.setMaximumWidth(150)
 
-
         # 책 리스트를 보여주는 콤보박스
         self.show_box = QComboBox()
         self.show_box.setMaximumWidth(350)
@@ -69,15 +65,12 @@ class Library(QWidget):
         self.hbox5.addWidget(self.lend_btn)
         self.hbox5.addWidget(self.return_btn)
 
-
-
         # 세번째 줄 데이터 라벨
         self.hbox3.addWidget(QLabel('Title'))
         self.hbox3.addWidget(QLabel('Author'))
         self.hbox3.addWidget(QLabel('Publisher'))
         self.hbox3.addWidget(QLabel('Lender'))
         self.hbox3.addWidget(QLabel('Date'))
-
 
         # 네번째 줄 데이터 창
         self.result_text = QTextEdit()
@@ -90,7 +83,7 @@ class Library(QWidget):
         self.vbox1.addLayout(self.hbox3)
         self.vbox1.addLayout(self.hbox4)
         self.vbox.addLayout(self.vbox1, 0, 0, 4, 2)
-        self.vbox2.addWidget(QLabel("\n정렬하기"),0,0)
+        self.vbox2.addWidget(QLabel("\n정렬하기"), 0, 0)
         self.vbox2.addLayout(self.hbox2, 1, 0)
         self.vbox2.addWidget(QLabel("\n\n검색하기"), 2, 0)
         self.vbox2.addLayout(self.hbox1, 3, 0)
@@ -113,3 +106,7 @@ class Library(QWidget):
 
         if sender.text() == "검색":
             self.search_box.currentText()
+
+    # destructor
+    def __del__(self):
+        return
