@@ -132,3 +132,87 @@ exports.showAvailables = functions.https.onRequest(async (req, res) => {
       console.log("Error getting documents: ", err);
     });
 });
+
+// Get the data of book from request, set the field 'available' of the book 'true' on Database
+exports.borrow = functions.https.onRequest(async (req, res) => {
+  var query = {
+    result: 1
+  };
+
+  const title = req.body.text.title;
+  const author = req.body.text.author;
+  const publisher = req.body.text.publisher;
+  const lender = req.body.text.publisher;
+
+  db.collection("Books")
+    .get()
+    .then(snapshot => {
+      snapshot.forEach(book => {
+        const id = book.id();
+        const data = book.data();
+        if (
+          data.title === title &&
+          data.author === author &&
+          data.publisher === publisher
+        ) {
+          if (data.availalbe === 0) query.result = 0;
+          else
+            db.collection("Books")
+              .doc(id)
+              .set({
+                availalbe: 0
+              });
+          return;
+        }
+      });
+
+      res.send(JSON.stringify(query));
+
+      return;
+    })
+    .catch(err => {
+      console.log("Error getting documents: ", err);
+    });
+});
+
+// Get the data of book from request, set the field 'onLoan' of the book 'available' on Database
+exports.giveBack = functions.https.onRequest(async (req, res) => {
+  var query = {
+    result: 1
+  };
+
+  const title = req.body.text.title;
+  const author = req.body.text.author;
+  const publisher = req.body.text.publisher;
+  const lender = req.body.text.publisher;
+
+  db.collection("Books")
+    .get()
+    .then(snapshot => {
+      snapshot.forEach(book => {
+        const id = book.id();
+        const data = book.data();
+        if (
+          data.title === title &&
+          data.author === author &&
+          data.publisher === publisher
+        ) {
+          if (data.availalbe === 1) query.result = 0;
+          else
+            db.collection("Books")
+              .doc(id)
+              .set({
+                availalbe: 1
+              });
+          return;
+        }
+      });
+
+      res.send(JSON.stringify(query));
+
+      return;
+    })
+    .catch(err => {
+      console.log("Error getting documents: ", err);
+    });
+});
