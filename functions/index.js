@@ -1,5 +1,5 @@
 // Runtime: Node.js 8
-// firebase version: 7.8.1
+// firebase --version: 7.8.1
 
 // The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
 const functions = require("firebase-functions");
@@ -17,12 +17,12 @@ const stringSimilarity = require("string-similarity");
 // Get the title of all books in Database, send to Client
 exports.showAll = functions.https.onRequest(async (req, res) => {
   var query = {};
+  var array = new Array();
 
   db.collection("Books")
     .get()
     .then(snapshot => {
       snapshot.forEach(book => {
-        var array = new Array();
         array.push(book.data().title);
       });
 
@@ -38,8 +38,8 @@ exports.showAll = functions.https.onRequest(async (req, res) => {
     });
 });
 
-// Get the data of books that has the highest string similarity with the title from request, send to Client
-exports.searchByTitle = functions.https.onRequest(async (req, res) => {
+// Get the data of book that has the highest string similarity with the book in the request, send to Client
+exports.search = functions.https.onRequest(async (req, res) => {
   var query = {};
   const keyWord = req.body.text.title;
 
@@ -53,77 +53,6 @@ exports.searchByTitle = functions.https.onRequest(async (req, res) => {
 
       query.result = mostSimilar;
 
-      res.send(JSON.stringify(query));
-
-      return;
-    })
-    .catch(err => {
-      console.log("Error getting documents: ", err);
-    });
-});
-
-// Get the data of books that has the highest string similarity with the author from request, send to Clinet
-exports.searchByAuthor = functions.https.onRequest(async (req, res) => {
-  var query = {};
-  const keyWord = req.body.text.author;
-
-  db.collection("Books")
-    .get()
-    .then(snapshot => {
-      var authors = new Array();
-
-      snapshot.forEach(book => authors.push(book.data().author));
-      const mostSimilar = stringSimilarity.findBestMatch(keyWord, authors);
-
-      query.result = mostSimilar;
-
-      res.send(JSON.stringify(query));
-
-      return;
-    })
-    .catch(err => {
-      console.log("Error getting documents: ", err);
-    });
-});
-
-// Get the data of books that has the highest string similarity with the publisher from request, send to Clinet
-exports.searchByPublisher = functions.https.onRequest(async (req, res) => {
-  var query = {};
-  const keyWord = req.body.text.publisher;
-
-  db.collection("Books")
-    .get()
-    .then(snapshot => {
-      var publishers = new Array();
-
-      snapshot.forEach(book => authors.push(book.data().publisher));
-      const mostSimilar = stringSimilarity.findBestMatch(keyWord, publishers);
-
-      query.result = mostSimilar;
-
-      res.send(JSON.stringify(query));
-
-      return;
-    })
-    .catch(err => {
-      console.log("Error getting documents: ", err);
-    });
-});
-
-// Get the title of all available books in Database, send to Client
-exports.showAvailables = functions.https.onRequest(async (req, res) => {
-  var query = {};
-
-  db.collection("Books")
-    .get()
-    .then(snapshot => {
-      var array = new Array();
-
-      snapshot.forEach(book => {
-        if (book.data().availalbe === 1) array.push(book.data().title);
-      });
-
-      query.result = array;
       res.send(JSON.stringify(query));
 
       return;
