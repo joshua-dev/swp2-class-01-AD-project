@@ -1,13 +1,11 @@
 # swp2-class-01-AD-project
 
-Software Project II AD Project
+Software Proejct 2 AD Project
 
 # TODO
 
-## Book management program using PyQt5 and Google Firebase
-
-- [x] Server/Database Building: Firebase
+- [x] Server/Database Building
 - [ ] Cloud Functions Implementation
-- [ ] GUI Implementation: PyQt5
+- [ ] GUI Implementation
 - [ ] Packaging
 - [ ] Export to executable
