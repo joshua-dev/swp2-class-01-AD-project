@@ -1,5 +1,5 @@
 // Runtime: Node.js 8
-// firebase version: 7.8.1
+// firebase version: 7.10.0
 
 // The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
 const functions = require('firebase-functions');
