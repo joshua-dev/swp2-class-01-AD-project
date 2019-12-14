@@ -1,6 +1,5 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt, QAbstractTableModel
-from book import *
 
 
 class Library(QWidget):
@@ -92,7 +91,6 @@ class Library(QWidget):
         self.vbox2.addLayout(self.hbox6)
         self.hbox.addLayout(self.vbox1)
         self.hbox.addLayout(self.vbox2)
-
 
         self.setLayout(self.hbox)
 
