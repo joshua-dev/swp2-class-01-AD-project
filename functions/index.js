@@ -21,8 +21,8 @@ exports.showAll = functions.https.onRequest((req, res) => {
   db.collection('Books')
     .get()
     .then(snapshot => {
-      snapshot.forEach(doc => {
-        query[doc.id] = doc.data();
+      snapshot.forEach(book => {
+        if (book.id !== 'DEFAULT') query[book.id] = book.data();
       });
 
       res.send(query);
@@ -80,28 +80,22 @@ exports.showNotAvailables = functions.https.onRequest((req, res) => {
 // Get the data of books that has the highest string similarity with the title from request, send to Client
 exports.searchByTitle = functions.https.onRequest((req, res) => {
   var query = {};
-  for (key in Object.keys(req)) console.log(key);
-
-  const keyWord = req.title;
-  var output_title = '';
-  var output_similarity = 0;
+  var titles = new Array();
+  const keyWord = req.query.title;
 
   db.collection('Books')
     .get()
     .then(snapshot => {
       snapshot.forEach(book => {
-        var similarity = stringSimilarity.compareTwoStrings(
-          keyWord,
-          book.data().title
-        );
-        if (similarity > output_similarity) {
-          output_title = book.data().title;
-          output_similarity = similarity;
-        }
+        if (book.id !== 'DEFAULT' && book.data().title !== '')
+          titles.push(book.data().title);
       });
 
-      query.title = output_title;
+      const mostSimilar = stringSimilarity.findBestMatch(keyWord, titles);
+      query.result = mostSimilar;
+
       res.send(query);
+
       return;
     })
     .catch(err => {
@@ -110,21 +104,23 @@ exports.searchByTitle = functions.https.onRequest((req, res) => {
 });
 
 // Get the data of books that has the highest string similarity with the author from request, send to Clinet
-exports.searchByAuthor = functions.https.onRequest(async (req, res) => {
+exports.searchByAuthor = functions.https.onRequest((req, res) => {
   var query = {};
-  const keyWord = req.body.text.author;
+  var authors = new Array();
+  const keyWord = req.query.author;
 
   db.collection('Books')
     .get()
     .then(snapshot => {
-      var authors = new Array();
+      snapshot.forEach(book => {
+        if (book.id !== 'DEFAULT' && book.data().author !== '')
+          authors.push(book.data().author);
+      });
 
-      snapshot.forEach(book => authors.push(book.data().author));
       const mostSimilar = stringSimilarity.findBestMatch(keyWord, authors);
-
       query.result = mostSimilar;
 
-      res.send(JSON.stringify(query));
+      res.send(query);
 
       return;
     })
@@ -134,21 +130,23 @@ exports.searchByAuthor = functions.https.onRequest(async (req, res) => {
 });
 
 // Get the data of books that has the highest string similarity with the publisher from request, send to Clinet
-exports.searchByPublisher = functions.https.onRequest(async (req, res) => {
+exports.searchByPublisher = functions.https.onRequest((req, res) => {
   var query = {};
-  const keyWord = req.body.text.publisher;
+  var publishers = new Array();
+  const keyWord = req.query.publisher;
 
   db.collection('Books')
     .get()
     .then(snapshot => {
-      var publishers = new Array();
+      snapshot.forEach(book => {
+        if (book.id !== 'DEFAULT' && book.data().publisher !== '')
+          publishers.push(book.data().publisher);
+      });
 
-      snapshot.forEach(book => authors.push(book.data().publisher));
       const mostSimilar = stringSimilarity.findBestMatch(keyWord, publishers);
-
       query.result = mostSimilar;
 
-      res.send(JSON.stringify(query));
+      res.send(query);
 
       return;
     })
