@@ -26,30 +26,82 @@ exports.showAll = functions.https.onRequest((req, res) => {
       });
 
       res.send(query);
+
+      // Should return Promise
       return;
     })
     .catch(err => {
-      console.log('Error getting documents', err);
+      console.log('Error getting documents: ', err);
     });
 });
 
-// Get the data of books that has the highest string similarity with the title from request, send to Client
-exports.searchByTitle = functions.https.onRequest(async (req, res) => {
+// Get the title of all available books in Database, send to Client
+exports.showAvailables = functions.https.onRequest((req, res) => {
   var query = {};
-  const keyWord = req.body.text.title;
 
   db.collection('Books')
     .get()
     .then(snapshot => {
-      var titles = new Array();
+      snapshot.forEach(book => {
+        if (book.data().available === true && book.id !== 'DEFAULT')
+          query[book.id] = book.data();
+      });
 
-      snapshot.forEach(book => titles.push(book.data().title));
-      const mostSimilar = stringSimilarity.findBestMatch(keyWord, titles);
+      res.send(query);
 
-      query.result = mostSimilar;
+      return;
+    })
+    .catch(err => {
+      console.log('Error getting documents: ', err);
+    });
+});
 
-      res.send(JSON.stringify(query));
+// Get the title of all books on loan in Database, send to Client
+exports.showNotAvailables = functions.https.onRequest((req, res) => {
+  var query = {};
 
+  db.collection('Books')
+    .get()
+    .then(snapshot => {
+      snapshot.forEach(book => {
+        if (book.data().available === false && book.id !== 'DEFAULT')
+          query[book.id] = book.data();
+      });
+
+      res.send(query);
+
+      return;
+    })
+    .catch(err => {
+      console.log('Error getting documents: ', err);
+    });
+});
+
+// Get the data of books that has the highest string similarity with the title from request, send to Client
+exports.searchByTitle = functions.https.onRequest((req, res) => {
+  var query = {};
+  for (key in Object.keys(req)) console.log(key);
+
+  const keyWord = req.title;
+  var output_title = '';
+  var output_similarity = 0;
+
+  db.collection('Books')
+    .get()
+    .then(snapshot => {
+      snapshot.forEach(book => {
+        var similarity = stringSimilarity.compareTwoStrings(
+          keyWord,
+          book.data().title
+        );
+        if (similarity > output_similarity) {
+          output_title = book.data().title;
+          output_similarity = similarity;
+        }
+      });
+
+      query.title = output_title;
+      res.send(query);
       return;
     })
     .catch(err => {
@@ -96,30 +148,6 @@ exports.searchByPublisher = functions.https.onRequest(async (req, res) => {
 
       query.result = mostSimilar;
 
-      res.send(JSON.stringify(query));
-
-      return;
-    })
-    .catch(err => {
-      console.log('Error getting documents: ', err);
-    });
-});
-
-// Get the title of all available books in Database, send to Client
-exports.showAvailables = functions.https.onRequest(async (req, res) => {
-  var query = {};
-
-  db.collection('Books')
-    .get()
-    .then(snapshot => {
-      var array = new Array();
-
-      snapshot.forEach(book => {
-        if (book.data().availalbe === 1 && book.data().title !== 'DEFAULT')
-          array.push(book.data().title);
-      });
-
-      query.result = array;
       res.send(JSON.stringify(query));
 
       return;
@@ -204,30 +232,6 @@ exports.giveBack = functions.https.onRequest(async (req, res) => {
         }
       });
 
-      res.send(JSON.stringify(query));
-
-      return;
-    })
-    .catch(err => {
-      console.log('Error getting documents: ', err);
-    });
-});
-
-// Get the title of all books on loan in Database, send to Client
-exports.showNotAvailables = functions.https.onRequest(async (req, res) => {
-  var query = {};
-
-  db.collection('Books')
-    .get()
-    .then(snapshot => {
-      var array = new Array();
-
-      snapshot.forEach(book => {
-        if (book.data().availalbe === 0 && book.data().title !== 'DEFAULT')
-          array.push(book.data().title);
-      });
-
-      query.result = array;
       res.send(JSON.stringify(query));
 
       return;
