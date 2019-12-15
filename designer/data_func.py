@@ -1,7 +1,8 @@
 import requests
 from library import *
 
-def show_All(self):
+
+def showAll(self):
     res = requests.get(
         'https://us-central1-kcc-library.cloudfunctions.net/showAll')
     result = res.json()
@@ -18,8 +19,10 @@ def show_All(self):
                 self.result_text.setItem(row, 2, QTableWidgetItem(val[k]))
         row += 1
 
-def show_Available(self):
+
+def showAvailables(self):
     pass
 
-def show_NotAvailable(self):
+
+def showNotAvailables(self):
     pass
