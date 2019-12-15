@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import Qt, QAbstractTableModel
+from data_func import *
 
 
 class Library(QWidget):
@@ -38,26 +39,21 @@ class Library(QWidget):
         # 반납하기 버튼
         self.return_btn = QPushButton("반납하기")
 
-        # 대여기간 콤보박스
-        self.date_box = QComboBox()
-        self.date_box.addItem('1일')
-        self.date_box.addItem('2일')
-        self.date_box.addItem('3일')
-        self.date_box.addItem('4일')
-        self.date_box.addItem('5일')
-        self.date_box.addItem('6일')
         # 대여하기 버튼
         self.lend_btn = QPushButton("대여하기")
 
         # 책 리스트를 보여주는 콤보박스
         self.show_box = QComboBox()
+        self.show_button = QPushButton("보기")
 
-        self.show_box.addItem("모든 책 보기")
-        self.show_box.addItem("대여 가능한 책들 보기")
-        self.show_box.addItem("대여 중인 책들 보기")
+        self.show_box.addItem("모든 책들")
+        self.show_box.addItem("대여 가능한 책들")
+        self.show_box.addItem("대여 중인 책들")
+
 
         self.hbox2.addWidget(self.show_box)
-        self.hbox5.addWidget(self.date_box)
+        self.hbox2.addWidget(self.show_button)
+
         self.hbox5.addWidget(self.lend_btn)
         self.hbox5.addWidget(self.return_btn)
 
@@ -69,10 +65,10 @@ class Library(QWidget):
         # 네번째 줄 데이터 창
         self.result_text = QTableWidget(self)
         self.result_text.setMinimumWidth(400)
-        self.result_text.setRowCount(2)
-        self.result_text.setColumnCount(3)
-        self.setResult_textData()
         self.result_text.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.result_text.setColumnCount(3)
+        self.setResult_textData("모든 책들")
+
 
         self.hbox4.addWidget(self.result_text)
 
@@ -96,32 +92,23 @@ class Library(QWidget):
 
         # 버튼 누르기 구현
         self.search_btn.clicked.connect(self.buttonClicked)
+        self.show_button.clicked.connect(self.buttonClicked)
         self.return_btn.clicked.connect(self.buttonClicked)
         self.lend_btn.clicked.connect(self.buttonClicked)
-
-        self.result_text.cellClicked.connect(self.cellClicked)
 
         self.setGeometry(600, 200, 600, 800)
         self.setWindowTitle('KCC_Library')
         self.show()
 
-    def setResult_textData(self):
-        column_headers = ['Title', 'Author', 'Publisher']
+    def setResult_textData(self, str):
+        column_headers = ['title', 'author', 'publisher']
         self.result_text.setHorizontalHeaderLabels(column_headers)
-        self.result_text.setItem(0, 0, QTableWidgetItem("안녕하세요"))
-        self.result_text.setItem(0, 1, QTableWidgetItem("이종수"))
-        self.result_text.setItem(0, 2, QTableWidgetItem("크크루크크"))
-        self.result_text.setItem(1, 0, QTableWidgetItem("채식주의자"))
-        self.result_text.setItem(1, 1, QTableWidgetItem("한강"))
-        self.result_text.setItem(1, 2, QTableWidgetItem("좋은들"))
-        self.result_text.resizeColumnToContents(2)
-
-    def cellClicked(self, row, col):
-        cell = self.result_text.item(row, col)
-        if cell is not None:
-            txt = cell.text()
-
-        self.show_lender.setText(txt)
+        if str == "모든 책들":
+            show_All(self)
+        elif str == "대여 가능한 책들":
+            show_Available(self)
+        elif str == "대여 중인 책들":
+            show_NotAvailable(self)
 
     def buttonClicked(self):
         sender = self.sender()
@@ -131,6 +118,16 @@ class Library(QWidget):
             ser = self.search_box.currentText()
             if key == 'Title':
                 pass
+
+        elif sender.text() == "보기":
+            key = self.show_box.currentText()
+            if key == "모든 책들":
+                self.setResult_textData("showAll")
+            elif key == "대여 가능한 책들":
+                self.setResult_textData("showAvailables")
+            elif key == "대여 중인 책들":
+                self.setResult_textData("showNotAvailables")
+
 
     # destructor
     def __del__(self):

@@ -1,15 +1,25 @@
-from firebase import firebase
 import requests
-import json
-import urllib.request
+from library import *
 
-url = 'https://us-central1-kcc-library.cloudfunctions.net/showAll'
-u = urllib.request.urlopen(url)
-data = u.read()
-print(data)
+def show_All(self):
+    res = requests.get(
+        'https://us-central1-kcc-library.cloudfunctions.net/showAll')
+    result = res.json()
+    row = 0
+    self.result_text.setRowCount(len(result))
+    for key in result:
+        val = result[key]
+        for k in val.keys():
+            if k == 'author':
+                self.result_text.setItem(row, 1, QTableWidgetItem(val[k]))
+            if k == 'title':
+                self.result_text.setItem(row, 0, QTableWidgetItem(val[k]))
+            if k == 'publisher':
+                self.result_text.setItem(row, 2, QTableWidgetItem(val[k]))
+        row += 1
 
+def show_Available(self):
+    pass
 
-#firebase = firebase.FirebaseApplication('https://us-central1-kcc-library.cloudfunctions.net', None)
-#result = firebase.get('/showAll', None)
-#print(result)
-
+def show_NotAvailable(self):
+    pass
