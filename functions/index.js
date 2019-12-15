@@ -6,35 +6,30 @@ const functions = require('firebase-functions');
 
 // The Firebase Admin SDK to access the Firebase Realtime Database.
 const admin = require('firebase-admin');
-admin.initializeApp();
+admin.initializeApp(functions.config().firebase);
 
 // Get Database from Cloud Firestore
-const db = admin.firestore();
+let db = admin.firestore();
 
 // Get string-similarity module
 const stringSimilarity = require('string-similarity');
 
 // Get the title of all books in Database, send to Client
-exports.showAll = functions.https.onRequest(async (req, res) => {
+exports.showAll = functions.https.onRequest((req, res) => {
   var query = {};
 
   db.collection('Books')
     .get()
     .then(snapshot => {
-      snapshot.forEach(book => {
-        var array = new Array();
-        if (book.data().title !== 'DEFAULT') array.push(book.data().title);
+      snapshot.forEach(doc => {
+        query[doc.id] = doc.data();
       });
 
-      query.result = array;
-
-      res.send(JSON.stringify(query));
-
-      // Should return Promise
+      res.send(query);
       return;
     })
     .catch(err => {
-      console.log('Error getting documents: ', err);
+      console.log('Error getting documents', err);
     });
 });
 
