@@ -1,40 +1,40 @@
-"Title","Publisher","Author","Owner","Lender"
-"Head First Design Patterns","한빛미디어","Eric Freeman 외 3명","",""
-"재료과학과 공학","시그마프레스","William D. Callister 외 1명","",""
-"Power C++","인피니티북스","천인국","",""
-"미디어와 공동체","","","",""
-"Bacterial Physiology and Metabolism","Cambridge University Press","김병홍 외 1명","",""
-"대학일반물리학II","CMG","대학일반물리학 교재편찬위원회","",""
-"대학물리학II","북스힐","대학물리학 교재편찬위원회","",""
-"대학생 인생설계 워크북","학지사","이의용","",""
-"미적분학 I","교우","James stewart","",""
-"경기장을 뛰쳐나온 인문학","북트리거","공규텍","",""
-"컴퓨터 구조 및 설계","한빛미디어","박명순 외 3명","",""
-"멘큐의 경제학","CENGAGE","N. Gregory Mankiw","",""
-"하늘에서 음식이 내린다면(원문)","스크린영어사","Judi Barrett","",""
-"Java의 정석","도우출판","남궁성","",""
-"Understanding Computers: Today and Tomorrow, Comprehensive 15th Edition","Technology evolution","Deborah Morley 외 1명","",""
-"소셜네트워크분석","청람","곽기영","",""
-"어서와파이썬은 처음이지","인피니티북스","천인국","",""
-"일반화학실험","국민대학교 출판부","국민대학교 생명나노화학과","",""
-"대기업직무적성 핵심 특강","","","",""
-"글쓰기 - 인문, 사회계열","국민대학교 출판부","","",""
-"일반물리학실험","국민대학교 출판부","일반물리학 실험교재 편찬위원회","",""
-"System Analysis and Design","Wiley","Alan Dennis 외 2명","",""
-"디지털 공학실험","국민대학교 출판부","민경식","",""
-"Elements of electromoagnetics","OxFord","Matthew Sadiku","",""
-"경영의 진화","더난","Stuar Crainer","",""
-"재료강도학","문운당","이동녕","",""
-"기초전자실험 with Pspice","한빛미디어","홍순관","",""
-"마이어스의 심리학 탐구","시그마프레스","David Miers","",""
-"미적분학 II","교우","James stewart","",""
-"HTML5+CSS3+Javascript 웹프로그래밍","생능출판","황기태","",""
-"교양인을 위한 캠벨 생명과학","바이오사이언스","Jane B. Reece","",""
-"대학물리학I","북스힐","대학물리학 교재편찬위원회","",""
-"Statics and mechanics of Materials","Pearson","Russell C. Hibbeler","",""
-"지식재산 창출 활용을 위한 발명과 특허","인피니티북스","홍정표","",""
-"법인세회계","청람","황규영 외 1명","",""
-"논리설계기초","센게이지러닝","Charles H. Roth","",""
-"재료열역학","홍릉과학출판사","Gaskell Laughlin","",""
-"금속상변태","교보문고","김원태 외 1명","",""
-"재료역학","Pearson","R. C Hibbeler","",""
+Title,Publisher,Author,Available
+Head First Design Patterns,�Ѻ��̵��,Eric Freeman �� 3��,1
+�����а� ����,�ñ׸�������,William D. Callister �� 1��,1
+Power C++,���Ǵ�Ƽ�Ͻ�,õ�α�,1
+�̵��� ����ü,,,1
+Bacterial Physiology and Metabolism,Cambridge University Press,�躴ȫ �� 1��,1
+�����Ϲݹ�����II,CMG,�����Ϲݹ����� ������������ȸ,1
+���й�����II,�Ͻ���,���й����� ������������ȸ,1
+���л� �λ����� ��ũ��,������,���ǿ�,1
+�������� I,����,James stewart,1
+������� ���ĳ��� �ι���,��Ʈ����,������,1
+��ǻ�� ���� �� ����,�Ѻ��̵��,�ڸ��� �� 3��,1
+��ť�� ������,CENGAGE,N. Gregory Mankiw,1
+�ϴÿ��� ������ �����ٸ�(����),��ũ�������,Judi Barrett,1
+Java�� ����,��������,���ü�,1
+"Understanding Computers: Today and Tomorrow, Comprehensive 15th Edition",Technology evolution,Deborah Morley �� 1��,1
+�Ҽȳ�Ʈ��ũ�м�,û��,���⿵,1
+������̽��� ó������,���Ǵ�Ƽ�Ͻ�,õ�α�,1
+�Ϲ�ȭ�н���,���δ��б� ���Ǻ�,���δ��б� ��������ȭ�а�,1
+������������ �ٽ� Ư��,,,1
+"�۾��� - �ι�, ��ȸ�迭",���δ��б� ���Ǻ�,,1
+�Ϲݹ����н���,���δ��б� ���Ǻ�,�Ϲݹ����� ���豳�� ��������ȸ,1
+System Analysis and Design,Wiley,Alan Dennis �� 2��,1
+������ ���н���,���δ��б� ���Ǻ�,�ΰ��,1
+Elements of electromoagnetics,OxFord,Matthew Sadiku,1
+�濵�� ��ȭ,����,Stuar Crainer,1
+��ᰭ����,�����,�̵���,1
+�������ڽ��� with Pspice,�Ѻ��̵��,ȫ����,1
+���̾�� �ɸ��� Ž��,�ñ׸�������,David Miers,1
+�������� II,����,James stewart,1
+HTML5+CSS3+Javascript �����α׷���,��������,Ȳ����,1
+�������� ���� ķ�� ��������,���̿����̾�,Jane B. Reece,1
+���й�����I,�Ͻ���,���й����� ������������ȸ,1
+Statics and mechanics of Materials,Pearson,Russell C. Hibbeler,1
+������� â�� Ȱ���� ���� �߸��� Ư��,���Ǵ�Ƽ�Ͻ�,ȫ��ǥ,1
+���μ�ȸ��,û��,Ȳ�Կ� �� 1��,1
+�����������,������������,Charles H. Roth,1
+��῭����,ȫ���������ǻ�,Gaskell Laughlin,1
+�ݼӻ���,��������,����� �� 1��,1
+��Ὺ��,Pearson,R. C Hibbeler,1
