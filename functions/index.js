@@ -1,40 +1,35 @@
 // Runtime: Node.js 8
-// firebase version: 7.8.1
+// firebase version: 7.10.0
 
 // The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
-const functions = require("firebase-functions");
+const functions = require('firebase-functions');
 
 // The Firebase Admin SDK to access the Firebase Realtime Database.
-const admin = require("firebase-admin");
-admin.initializeApp();
+const admin = require('firebase-admin');
+admin.initializeApp(functions.config().firebase);
 
 // Get Database from Cloud Firestore
-const db = admin.firestore();
+let db = admin.firestore();
 
 // Get string-similarity module
-const stringSimilarity = require("string-similarity");
+const stringSimilarity = require('string-similarity');
 
 // Get the title of all books in Database, send to Client
-exports.showAll = functions.https.onRequest(async (req, res) => {
+exports.showAll = functions.https.onRequest((req, res) => {
   var query = {};
 
-  db.collection("Books")
+  db.collection('Books')
     .get()
     .then(snapshot => {
-      snapshot.forEach(book => {
-        var array = new Array();
-        array.push(book.data().title);
+      snapshot.forEach(doc => {
+        query[doc.id] = doc.data();
       });
 
-      query.result = array;
-
-      res.send(JSON.stringify(query));
-
-      // Should return Promise
+      res.send(query);
       return;
     })
     .catch(err => {
-      console.log("Error getting documents: ", err);
+      console.log('Error getting documents', err);
     });
 });
 
@@ -43,7 +38,7 @@ exports.searchByTitle = functions.https.onRequest(async (req, res) => {
   var query = {};
   const keyWord = req.body.text.title;
 
-  db.collection("Books")
+  db.collection('Books')
     .get()
     .then(snapshot => {
       var titles = new Array();
@@ -58,7 +53,7 @@ exports.searchByTitle = functions.https.onRequest(async (req, res) => {
       return;
     })
     .catch(err => {
-      console.log("Error getting documents: ", err);
+      console.log('Error getting documents: ', err);
     });
 });
 
@@ -67,7 +62,7 @@ exports.searchByAuthor = functions.https.onRequest(async (req, res) => {
   var query = {};
   const keyWord = req.body.text.author;
 
-  db.collection("Books")
+  db.collection('Books')
     .get()
     .then(snapshot => {
       var authors = new Array();
@@ -82,7 +77,7 @@ exports.searchByAuthor = functions.https.onRequest(async (req, res) => {
       return;
     })
     .catch(err => {
-      console.log("Error getting documents: ", err);
+      console.log('Error getting documents: ', err);
     });
 });
 
@@ -91,7 +86,7 @@ exports.searchByPublisher = functions.https.onRequest(async (req, res) => {
   var query = {};
   const keyWord = req.body.text.publisher;
 
-  db.collection("Books")
+  db.collection('Books')
     .get()
     .then(snapshot => {
       var publishers = new Array();
@@ -106,7 +101,7 @@ exports.searchByPublisher = functions.https.onRequest(async (req, res) => {
       return;
     })
     .catch(err => {
-      console.log("Error getting documents: ", err);
+      console.log('Error getting documents: ', err);
     });
 });
 
@@ -114,13 +109,14 @@ exports.searchByPublisher = functions.https.onRequest(async (req, res) => {
 exports.showAvailables = functions.https.onRequest(async (req, res) => {
   var query = {};
 
-  db.collection("Books")
+  db.collection('Books')
     .get()
     .then(snapshot => {
       var array = new Array();
 
       snapshot.forEach(book => {
-        if (book.data().availalbe === 1) array.push(book.data().title);
+        if (book.data().availalbe === 1 && book.data().title !== 'DEFAULT')
+          array.push(book.data().title);
       });
 
       query.result = array;
@@ -129,7 +125,7 @@ exports.showAvailables = functions.https.onRequest(async (req, res) => {
       return;
     })
     .catch(err => {
-      console.log("Error getting documents: ", err);
+      console.log('Error getting documents: ', err);
     });
 });
 
@@ -144,7 +140,7 @@ exports.borrow = functions.https.onRequest(async (req, res) => {
   const publisher = req.body.text.publisher;
   const lender = req.body.text.publisher;
 
-  db.collection("Books")
+  db.collection('Books')
     .get()
     .then(snapshot => {
       snapshot.forEach(book => {
@@ -157,7 +153,7 @@ exports.borrow = functions.https.onRequest(async (req, res) => {
         ) {
           if (data.availalbe === 0) query.result = 0;
           else
-            db.collection("Books")
+            db.collection('Books')
               .doc(id)
               .set({
                 availalbe: 0
@@ -171,7 +167,7 @@ exports.borrow = functions.https.onRequest(async (req, res) => {
       return;
     })
     .catch(err => {
-      console.log("Error getting documents: ", err);
+      console.log('Error getting documents: ', err);
     });
 });
 
@@ -186,7 +182,7 @@ exports.giveBack = functions.https.onRequest(async (req, res) => {
   const publisher = req.body.text.publisher;
   const lender = req.body.text.publisher;
 
-  db.collection("Books")
+  db.collection('Books')
     .get()
     .then(snapshot => {
       snapshot.forEach(book => {
@@ -199,7 +195,7 @@ exports.giveBack = functions.https.onRequest(async (req, res) => {
         ) {
           if (data.availalbe === 1) query.result = 0;
           else
-            db.collection("Books")
+            db.collection('Books')
               .doc(id)
               .set({
                 availalbe: 1
@@ -213,6 +209,30 @@ exports.giveBack = functions.https.onRequest(async (req, res) => {
       return;
     })
     .catch(err => {
-      console.log("Error getting documents: ", err);
+      console.log('Error getting documents: ', err);
+    });
+});
+
+// Get the title of all books on loan in Database, send to Client
+exports.showNotAvailables = functions.https.onRequest(async (req, res) => {
+  var query = {};
+
+  db.collection('Books')
+    .get()
+    .then(snapshot => {
+      var array = new Array();
+
+      snapshot.forEach(book => {
+        if (book.data().availalbe === 0 && book.data().title !== 'DEFAULT')
+          array.push(book.data().title);
+      });
+
+      query.result = array;
+      res.send(JSON.stringify(query));
+
+      return;
+    })
+    .catch(err => {
+      console.log('Error getting documents: ', err);
     });
 });
