@@ -9,4 +9,4 @@
 - [x] GUI Implementation
 - [x] Unit test
 - [x] Packaging
-- [ ] Export to executable
+- [x] Export to executable

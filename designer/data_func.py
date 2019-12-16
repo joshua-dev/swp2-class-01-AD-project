@@ -54,9 +54,9 @@ def borrow(self, title):
     res = requests.get(url=url, params=reqData)
     result = res.json()
     if result['result'] == 1:
-        return "대여가 완료 되었어요!"
+        return "대여가 완료되었어요!"
     else:
-        return "대여에 실패 했어요"
+        return "대여에 실패했어요"
 
 
 def giveBack(self, title):
@@ -65,7 +65,7 @@ def giveBack(self, title):
     res = requests.get(url=url, params=reqData)
     result = res.json()
     if result['result'] == 1:
-        return "반납이 완료 되었어요!"
+        return "반납이 완료되었어요!"
     else:
         return "반납에 실패했어요"
 
