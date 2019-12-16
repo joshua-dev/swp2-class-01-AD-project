@@ -1,8 +1,7 @@
 import requests
-import json
 
 
-def showAll() -> None:
+def showAll() -> int:
     url = 'https://us-central1-kcc-library.cloudfunctions.net/showAll'
     res = requests.get(url=url, params=None)
 
@@ -12,8 +11,10 @@ def showAll() -> None:
         for key in val.keys():
             print(f'{key}: {val[key]}')
 
+    return res.status_code
 
-def showAvailables() -> None:
+
+def showAvailables() -> int:
     url = 'https://us-central1-kcc-library.cloudfunctions.net/showAvailables'
     res = requests.get(url=url, params=None)
 
@@ -23,8 +24,10 @@ def showAvailables() -> None:
         for key in val.keys():
             print(f'{key}: {val[key]}')
 
+    return res.status_code
 
-def showNotAvailables() -> None:
+
+def showNotAvailables() -> int:
     url = 'https://us-central1-kcc-library.cloudfunctions.net/showNotAvailables'
     res = requests.get(url=url, params=None)
 
@@ -34,32 +37,48 @@ def showNotAvailables() -> None:
         for key in val.keys():
             print(f'{key}: {val[key]}')
 
+    return res.status_code
 
-def searchByTitle(title: str) -> None:
+
+def searchByTitle(title: str) -> int:
     reqData = {'title': title}
     url = 'https://us-central1-kcc-library.cloudfunctions.net/searchByTitle'
 
     res = requests.get(url=url, params=reqData)
     result = res.json()
 
-    for key in result.keys():
-        print(f'{key}: {result[key]}')
+    print(result)
+
+    return res.status_code
 
 
-def searchByAuthor(author: str) -> None:
+def searchByAuthor(author: str) -> int:
     reqData = {'author': author}
     url = 'https://us-central1-kcc-library.cloudfunctions.net/searchByAuthor'
 
     res = requests.get(url=url, params=reqData)
     result = res.json()
 
-    for key in result.keys():
-        print(f'{key}: {result[key]}')
+    print(result)
+
+    return res.status_code
 
 
-def searchByPublisher(publisher: str) -> None:
+def searchByPublisher(publisher: str) -> int:
     reqData = {'publisher': publisher}
     url = 'https://us-central1-kcc-library.cloudfunctions.net/searchByPublisher'
+
+    res = requests.get(url=url, params=reqData)
+    result = res.json()
+
+    print(result)
+
+    return res.status_code
+
+
+def borrow(title: str) -> int:
+    reqData = {'title': title}
+    url = 'https://us-central1-kcc-library.cloudfunctions.net/borrow'
 
     res = requests.get(url=url, params=reqData)
     result = res.json()
@@ -67,13 +86,17 @@ def searchByPublisher(publisher: str) -> None:
     for key in result.keys():
         print(f'{key}: {result[key]}')
 
+    return res.status_code
 
-if __name__ == '__main__':
-    showAll()
-    print('-' * 20)
-    searchByTitle('C++ Programming')
-    print('-' * 20)
-    searchByAuthor('Alan Walker')
-    print('-' * 20)
-    searchByPublisher('Wiley')
-    print('-' * 20)
+
+def giveBack(title: str) -> int:
+    reqData = {'title': title}
+    url = 'https://us-central1-kcc-library.cloudfunctions.net/giveBack'
+
+    res = requests.get(url=url, params=reqData)
+    result = res.json()
+
+    for key in result.keys():
+        print(f'{key}: {result[key]}')
+
+    return res.status_code

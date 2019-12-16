@@ -6,7 +6,7 @@
 
 - [x] Server/Database Building
 - [x] Cloud Functions Implementation
-- [ ] GUI Implementation
-- [ ] Unit test
-- [ ] Packaging
+- [x] GUI Implementation
+- [x] Unit test
+- [x] Packaging
 - [ ] Export to executable

@@ -92,10 +92,17 @@ exports.searchByTitle = functions.https.onRequest((req, res) => {
       });
 
       const mostSimilar = stringSimilarity.findBestMatch(keyWord, titles);
-      query.result = mostSimilar;
+      const bestMatchTitle = mostSimilar.bestMatch.target;
+
+      snapshot.forEach(book => {
+        if (book.id !== 'DEFAULT' && book.data().title === bestMatchTitle) {
+          query.result = book.data();
+          res.send(query);
+          return;
+        }
+      });
 
       res.send(query);
-
       return;
     })
     .catch(err => {
@@ -118,10 +125,17 @@ exports.searchByAuthor = functions.https.onRequest((req, res) => {
       });
 
       const mostSimilar = stringSimilarity.findBestMatch(keyWord, authors);
-      query.result = mostSimilar;
+      const bestMatchAuthor = mostSimilar.bestMatch.target;
+
+      snapshot.forEach(book => {
+        if (book.id !== 'DEFAULT' && book.data().author === bestMatchAuthor) {
+          query.result = book.data();
+          res.send(query);
+          return;
+        }
+      });
 
       res.send(query);
-
       return;
     })
     .catch(err => {
@@ -144,10 +158,20 @@ exports.searchByPublisher = functions.https.onRequest((req, res) => {
       });
 
       const mostSimilar = stringSimilarity.findBestMatch(keyWord, publishers);
-      query.result = mostSimilar;
+      const bestMatchPublisher = mostSimilar.bestMatch.target;
+
+      snapshot.forEach(book => {
+        if (
+          book.id !== 'DEFAULT' &&
+          book.data().publisher === bestMatchPublisher
+        ) {
+          query.result = book.data();
+          res.send(query);
+          return;
+        }
+      });
 
       res.send(query);
-
       return;
     })
     .catch(err => {
@@ -156,40 +180,29 @@ exports.searchByPublisher = functions.https.onRequest((req, res) => {
 });
 
 // Get the data of book from request, set the field 'available' of the book 'true' on Database
-exports.borrow = functions.https.onRequest(async (req, res) => {
+exports.borrow = functions.https.onRequest((req, res) => {
   var query = {
-    result: 1
+    result: 0
   };
 
-  const title = req.body.text.title;
-  const author = req.body.text.author;
-  const publisher = req.body.text.publisher;
-  const lender = req.body.text.publisher;
+  const title = req.query.title;
 
   db.collection('Books')
     .get()
     .then(snapshot => {
       snapshot.forEach(book => {
-        const id = book.id();
-        const data = book.data();
-        if (
-          data.title === title &&
-          data.author === author &&
-          data.publisher === publisher
-        ) {
-          if (data.availalbe === 0) query.result = 0;
-          else
-            db.collection('Books')
-              .doc(id)
-              .set({
-                availalbe: 0
-              });
+        if (book.id !== 'DEFAULT' && book.data().title === title) {
+          db.collection('Books')
+            .doc(book.id)
+            .update({
+              available: false
+            });
+          query.result = 1;
+          res.send(query);
           return;
         }
       });
-
-      res.send(JSON.stringify(query));
-
+      res.send(query);
       return;
     })
     .catch(err => {
@@ -198,40 +211,29 @@ exports.borrow = functions.https.onRequest(async (req, res) => {
 });
 
 // Get the data of book from request, set the field 'onLoan' of the book 'available' on Database
-exports.giveBack = functions.https.onRequest(async (req, res) => {
+exports.giveBack = functions.https.onRequest((req, res) => {
   var query = {
-    result: 1
+    result: 0
   };
 
-  const title = req.body.text.title;
-  const author = req.body.text.author;
-  const publisher = req.body.text.publisher;
-  const lender = req.body.text.publisher;
+  const title = req.query.title;
 
   db.collection('Books')
     .get()
     .then(snapshot => {
       snapshot.forEach(book => {
-        const id = book.id();
-        const data = book.data();
-        if (
-          data.title === title &&
-          data.author === author &&
-          data.publisher === publisher
-        ) {
-          if (data.availalbe === 1) query.result = 0;
-          else
-            db.collection('Books')
-              .doc(id)
-              .set({
-                availalbe: 1
-              });
+        if (book.id !== 'DEFAULT' && book.data().title === title) {
+          db.collection('Books')
+            .doc(book.id)
+            .update({
+              available: true
+            });
+          query.result = 1;
+          res.send(query);
           return;
         }
       });
-
-      res.send(JSON.stringify(query));
-
+      res.send(query);
       return;
     })
     .catch(err => {
