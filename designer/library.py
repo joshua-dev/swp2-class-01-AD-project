@@ -57,7 +57,7 @@ class Library(QWidget):
         self.show_box.addItem("대여 가능한 책들")
         self.show_box.addItem("대여 중인 책들")
 
-        #데이터 창
+        # 데이터 창
         self.result_text = QTableWidget(self)
         self.result_text.setMinimumWidth(400)
         self.result_text.setSelectionMode(QAbstractItemView.SingleSelection)
@@ -65,7 +65,7 @@ class Library(QWidget):
         self.setResult_textData("모든 책들")
 
         # 대여 성공여부 창
-        self.show_lender = QTextEdit("책을 선택한뒤 대출하기나 반납을 눌러주세요!")
+        self.show_lender = QTextEdit("책을 선택한 뒤 대출하기나 반납을 눌러주세요!")
         self.show_lender.setReadOnly(True)
         self.show_lender.setMaximumHeight(200)
 
@@ -108,7 +108,7 @@ class Library(QWidget):
         self.return_btn.clicked.connect(self.buttonClicked)
         self.lend_btn.clicked.connect(self.buttonClicked)
 
-        #클릭 구현
+        # 클릭 구현
         self.result_text.cellClicked.connect(self.cell_func)
 
         self.setGeometry(600, 200, 600, 800)
@@ -117,7 +117,8 @@ class Library(QWidget):
         self.show()
 
     def closeEvent(self, event):
-        button_reply = QMessageBox.information(self, "message", "종료하시겠습니까?", QMessageBox.Yes, QMessageBox.No)
+        button_reply = QMessageBox.information(
+            self, "message", "종료하시겠습니까?", QMessageBox.Yes, QMessageBox.No)
         if button_reply == QMessageBox.Yes:
             pass
         else:
@@ -153,14 +154,14 @@ class Library(QWidget):
 
         elif sender.text() == "대여하기":
             br = self.show_lender.toPlainText()
-            if br == "대여가 완료 되었어요!" or br == "대여에 실패 했어요" or br == "반납이 완료 되었어요!" or br == "반납이 완료 되었어요!" or br == "반납에 실패했어요":
+            if br == "대여가 완료되었어요!" or br == "대여에 실패했어요" or br == "반납이 완료되었어요!" or br == "반납이 완료되었어요!" or br == "반납에 실패했어요":
                 self.show_lender.setText("책을 선택해 주세요")
             else:
                 self.show_lender.setText(borrow(self, br))
 
         elif sender.text() == "반납하기":
             gv = self.show_lender.toPlainText()
-            if gv == "대여가 완료 되었어요!" or gv == "대여에 실패 했어요" or gv == "반납이 완료 되었어요!" or gv == "반납이 완료 되었어요!" or gv == "반납에 실패했어요":
+            if gv == "대여가 완료되었어요!" or gv == "대여에 실패했어요" or gv == "반납이 완료되었어요!" or gv == "반납이 완료되었어요!" or gv == "반납에 실패했어요":
                 self.show_lender.setText("책을 선택해 주세요")
             else:
                 self.show_lender.setText(giveBack(self, gv))
