@@ -25,12 +25,49 @@ def showNotAvailables(self):
 
 
 def searchByTitle(self, title):
-    requestData = {"title": title}
-    requestData = json.dumps(requestData)
+    reqData = {'title': title}
     url = 'https://us-central1-kcc-library.cloudfunctions.net/searchByTitle'
-    res = requests.get(url, params=requestData)
+    res = requests.get(url=url, params=reqData)
     result = res.json()
     showData(self, result)
+
+
+def searchByAuthor(self, author):
+    reqData = {'author': author}
+    url = 'https://us-central1-kcc-library.cloudfunctions.net/searchByAuthor'
+    res = requests.get(url=url, params=reqData)
+    result = res.json()
+    showData(self, result)
+
+
+def searchByPublisher(self, publisher):
+    reqData = {'publisher': publisher}
+    url = 'https://us-central1-kcc-library.cloudfunctions.net/searchByPublisher'
+    res = requests.get(url=url, params=reqData)
+    result = res.json()
+    showData(self, result)
+
+
+def borrow(self, title):
+    reqData = {'title': title}
+    url = 'https://us-central1-kcc-library.cloudfunctions.net/borrow'
+    res = requests.get(url=url, params=reqData)
+    result = res.json()
+    if result['result'] == 1:
+        return "대여가 완료 되었어요!"
+    else:
+        return "대여에 실패 했어요"
+
+
+def giveBack(self, title):
+    reqData = {'title': title}
+    url = 'https://us-central1-kcc-library.cloudfunctions.net/giveBack'
+    res = requests.get(url=url, params=reqData)
+    result = res.json()
+    if result['result'] == 1:
+        return "반납이 완료 되었어요!"
+    else:
+        return "반납에 실패했어요"
 
 
 def showData(self, result):
