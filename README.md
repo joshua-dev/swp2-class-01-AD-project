@@ -1,8 +1,4 @@
-# swp2-class-01-AD-project
-
-## Software Proejct II AD Project
-
-# TODO
+# Software Proejct II AD Project
 
 - [x] Server/Database Building
 - [x] Cloud Functions Implementation
